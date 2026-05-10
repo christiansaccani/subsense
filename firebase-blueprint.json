@@ -1,0 +1,50 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "emailVerified": { "type": "boolean" },
+        "activityMonitoringEnabled": { "type": "boolean" },
+        "googleLinked": { "type": "boolean" },
+        "lastAnalysisAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Subscription": {
+      "title": "Subscription",
+      "description": "A digital subscription tracked by the user",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The UID of the owner" },
+        "name": { "type": "string", "description": "Name of the service (e.g. Netflix)" },
+        "cost": { "type": "number", "description": "Cost of the subscription" },
+        "currency": { "type": "string", "description": "Currency code (e.g. EUR)" },
+        "cycle": { "type": "string", "enum": ["monthly", "annual"], "description": "Billing cycle" },
+        "category": { "type": "string", "description": "Category of the service" },
+        "renewalDate": { "type": "string", "format": "date-time", "description": "Next renewal date" },
+        "lastUsedAt": { "type": "string", "format": "date-time", "description": "Last time the user interacted with or used this service" },
+        "remindersEnabled": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name", "cost", "cycle", "renewalDate"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/subscriptions/{subscriptionId}": {
+      "schema": "Subscription",
+      "description": "User subscriptions"
+    }
+  }
+}
