@@ -6,6 +6,7 @@ import { Timestamp } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 import { format } from 'date-fns';
+import { getServiceLogo } from '../constants';
 
 interface AddSubscriptionModalProps {
   userId: string;
@@ -124,7 +125,16 @@ export default function AddSubscriptionModal({ userId, onClose, onAdded, subscri
                     name === platform.name ? "bg-white text-black" : "bg-white/5 text-slate-300"
                   )}
                 >
-                  <div className={cn("w-2 h-2 rounded-full", platform.color)} />
+                  {getServiceLogo(platform.name) ? (
+                    <img 
+                      src={getServiceLogo(platform.name)!} 
+                      className="w-4 h-4 object-contain" 
+                      alt={platform.name}
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <div className={cn("w-2 h-2 rounded-full", platform.color)} />
+                  )}
                   {platform.name}
                 </button>
               ))}

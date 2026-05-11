@@ -10,6 +10,7 @@ import { cn, parseFirestoreDate } from '../lib/utils';
 import { deleteField } from 'firebase/firestore';
 import { format, differenceInDays, formatDistanceToNow } from 'date-fns';
 import { it } from 'date-fns/locale';
+import { getServiceLogo } from '../constants';
 
 interface UsageAnalysisProps {
   user: User | null;
@@ -221,6 +222,18 @@ export default function UsageAnalysis({ user, profile, subscriptions, onUpdate, 
             <div key={sub.id} className="p-4 bg-white/5 rounded-2xl border border-white/5">
               <div className="flex justify-between items-center mb-3">
                 <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-sm font-black border border-white/10 shrink-0 overflow-hidden">
+                    {sub.logoUrl || getServiceLogo(sub.name) ? (
+                      <img 
+                        src={sub.logoUrl || getServiceLogo(sub.name)!} 
+                        alt={sub.name} 
+                        className="w-full h-full object-contain p-1.5"
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      sub.name[0]
+                    )}
+                  </div>
                   <div className="flex flex-col">
                     <h4 className="font-bold text-sm tracking-tight">{sub.name}</h4>
                     <div className="flex items-center gap-2">

@@ -4,6 +4,7 @@ import { Subscription } from '../types';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { CreditCard, Calendar, TrendingDown } from 'lucide-react';
+import { getServiceLogo } from '../constants';
 
 interface DashboardProps {
   subscriptions: Subscription[];
@@ -74,8 +75,17 @@ export default function Dashboard({ subscriptions }: DashboardProps) {
           {stats.nextRenewals.length > 0 ? stats.nextRenewals.map((sub, idx) => (
             <div key={idx} className="flex justify-between items-center">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-white/5 rounded-lg flex items-center justify-center text-xs font-black">
-                  {sub.name[0]}
+                <div className="w-8 h-8 bg-white/5 rounded-lg flex items-center justify-center text-xs font-black overflow-hidden border border-white/5">
+                  {sub.logoUrl || getServiceLogo(sub.name) ? (
+                    <img 
+                      src={sub.logoUrl || getServiceLogo(sub.name)!} 
+                      alt={sub.name} 
+                      className="w-full h-full object-contain p-1"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    sub.name[0]
+                  )}
                 </div>
                 <span className="font-bold text-sm">{sub.name}</span>
               </div>

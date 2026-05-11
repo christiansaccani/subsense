@@ -15,6 +15,7 @@ export interface Subscription {
   usageFrequency?: UsageFrequency;
   usageTimeLabel?: string;
   isLinked?: boolean;
+  logoUrl?: string;
   createdAt: any; // Firestore Timestamp
   lastUsedAt?: any; // Firestore Timestamp
 }

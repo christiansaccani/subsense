@@ -36,6 +36,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { format, differenceInDays } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { cn, parseFirestoreDate } from './lib/utils';
+import { getServiceLogo } from './constants';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -542,15 +543,24 @@ export default function App() {
                 key={sub.id} 
                 className="frosted-card p-4 active:bg-white/10 transition-all flex items-center gap-4 group"
               >
-                <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-xl font-black border border-white/10 shrink-0">
-                  {sub.name[0]}
+                <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-xl font-black border border-white/10 shrink-0 overflow-hidden">
+                  {sub.logoUrl || getServiceLogo(sub.name) ? (
+                    <img 
+                      src={sub.logoUrl || getServiceLogo(sub.name)!} 
+                      alt={sub.name} 
+                      className="w-full h-full object-contain p-2"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    sub.name[0]
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-start">
                     <h4 className="font-bold truncate text-sm">{sub.name}</h4>
                     <p className="font-mono font-black text-brand-red text-sm">€{sub.cost.toFixed(2)}</p>
                   </div>
-                  <div className="flex justify-between items-end mt-1">
+                  <div className="mt-1 space-y-0.5">
                     <p className="text-[10px] text-slate-500 font-bold uppercase tracking-tighter">
                       {sub.category} • {sub.cycle === 'monthly' ? 'Mese' : 'Anno'}
                     </p>
