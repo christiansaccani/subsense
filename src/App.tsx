@@ -346,6 +346,9 @@ export default function App() {
     }
   }, [user]);
 
+  const handleUpdate = useCallback(() => user && fetchSubscriptions(user.uid), [user, fetchSubscriptions]);
+  const handleProfileUpdate = useCallback(() => user && fetchProfile(user), [user, fetchProfile]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-brand-dark">
@@ -603,8 +606,8 @@ export default function App() {
             user={user}
             profile={profile}
             subscriptions={subscriptions} 
-            onUpdate={() => user && fetchSubscriptions(user.uid)} 
-            onProfileUpdate={() => user && fetchProfile(user)}
+            onUpdate={handleUpdate} 
+            onProfileUpdate={handleProfileUpdate}
             onAnalyzingStateChange={setIsAnalyzingAI}
           />
         )}

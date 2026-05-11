@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Subscription, UsageFrequency, UserProfile } from '../types';
 import { User } from 'firebase/auth';
 import { AlertCircle, Trash2, CheckCircle, Zap, ImagePlus, Loader2, Sparkles, Calendar, BellRing } from 'lucide-react';
@@ -44,12 +44,7 @@ export default function UsageAnalysis({ user, profile, subscriptions, onUpdate, 
     };
   }, [analyzing, onAnalyzingStateChange]);
 
-  useEffect(() => {
-    // Force a fresh read of the profile when opening this section as requested
-    onProfileUpdate();
-  }, [onProfileUpdate]);
-
-  const lastAnalysis = parseFirestoreDate(profile?.lastAnalysisAt);
+  const lastAnalysis = useMemo(() => parseFirestoreDate(profile?.lastAnalysisAt), [profile?.lastAnalysisAt]);
   console.log('Profile Last Analysis Raw:', profile?.lastAnalysisAt);
   console.log('Parsed Last Analysis:', lastAnalysis);
   const isValidAnalysisDate = lastAnalysis instanceof Date && !isNaN(lastAnalysis.getTime());
@@ -105,7 +100,8 @@ export default function UsageAnalysis({ user, profile, subscriptions, onUpdate, 
             if (sub && sub.id && !matchedSubIds.has(sub.id)) {
               await subscriptionService.updateSubscription(sub.id, { 
                 usageFrequency: result.frequency as UsageFrequency,
-                usageTimeLabel: result.usageTimeLabel
+                usageTimeLabel: result.usageTimeLabel,
+                isFromAnalysis: true
               });
               matchedSubIds.add(sub.id);
               updatedCount++;
@@ -175,10 +171,6 @@ export default function UsageAnalysis({ user, profile, subscriptions, onUpdate, 
 
         {isValidAnalysisDate && lastAnalysis && (
           <div className="mb-6 pb-4 border-b border-white/5">
-            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-2 mb-1">
-              <Calendar className="w-3 h-3 text-brand-red" />
-              Cronologia Analisi
-            </p>
             <div className="flex flex-col gap-1">
               <p className="text-[11px] text-white font-medium">
                 Ultima scansione: <span className="text-brand-red font-black uppercase text-[10px] ml-1">{formatDistanceToNow(lastAnalysis, { addSuffix: true, locale: it })}</span>
@@ -236,16 +228,19 @@ export default function UsageAnalysis({ user, profile, subscriptions, onUpdate, 
                   </div>
                   <div className="flex flex-col">
                     <h4 className="font-bold text-sm tracking-tight">{sub.name}</h4>
-                    <div className="flex items-center gap-2">
-                      <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{sub.category}</p>
+                    <div className="space-y-0.5 mt-0.5">
+                      <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-none">{sub.category}</p>
                       {sub.usageTimeLabel && (
-                        <span className="text-[9px] text-emerald-500 font-mono font-bold bg-emerald-500/10 px-1.5 py-0.5 rounded tracking-tighter">
-                          {sub.usageTimeLabel}
-                        </span>
+                        <div className="flex">
+                          <span className="text-[9px] text-emerald-500 font-mono font-bold bg-emerald-500/10 px-1.5 py-0.5 rounded tracking-tighter leading-none">
+                            {sub.usageTimeLabel}
+                          </span>
+                        </div>
                       )}
                     </div>
                   </div>
-                  {sub.isLinked && (
+
+                  {sub.isLinked && !sub.isFromAnalysis && (
                     <div className="flex flex-col items-end">
                       <span className="bg-brand-red/10 text-brand-red text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full border border-brand-red/20 flex items-center gap-1">
                         <Zap className="w-2.5 h-2.5" />
@@ -258,20 +253,31 @@ export default function UsageAnalysis({ user, profile, subscriptions, onUpdate, 
                   €{sub.cost.toFixed(2)}
                 </div>
               </div>
-              <div className="grid grid-cols-4 gap-1.5 p-1 bg-black/20 rounded-xl">
-                {FREQUENCY_OPTIONS.map(opt => (
-                  <button
-                    key={opt.value}
-                    onClick={() => handleUpdateUsage(sub.id!, opt.value, sub.usageFrequency)}
-                    className={`py-2 rounded-lg text-[10px] font-black uppercase tracking-tighter transition-all ${
-                      sub.usageFrequency === opt.value
-                        ? 'bg-brand-red text-white shadow-lg'
-                        : 'text-slate-500 active:bg-white/5'
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
+              <div className={cn(
+                "p-1 bg-black/20 rounded-xl",
+                sub.isFromAnalysis ? "flex" : "grid grid-cols-4 gap-1.5"
+              )}>
+                {sub.isFromAnalysis ? (
+                  <div className="w-full py-2 bg-brand-red text-white shadow-lg rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2">
+                    <CheckCircle className="w-3 h-3" />
+                    Utilizzo {FREQUENCY_OPTIONS.find(o => o.value === sub.usageFrequency)?.label}
+                  </div>
+                ) : (
+                  FREQUENCY_OPTIONS.map(opt => (
+                    <button
+                      key={opt.value}
+                      disabled={sub.isFromAnalysis}
+                      onClick={() => handleUpdateUsage(sub.id!, opt.value, sub.usageFrequency)}
+                      className={`py-2 rounded-lg text-[10px] font-black uppercase tracking-tighter transition-all ${
+                        sub.usageFrequency === opt.value
+                          ? 'bg-brand-red text-white shadow-lg'
+                          : 'text-slate-500 active:bg-white/5 disabled:opacity-30'
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))
+                )}
               </div>
             </div>
           ))}
