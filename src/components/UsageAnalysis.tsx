@@ -83,17 +83,30 @@ export default function UsageAnalysis({ user, profile, subscriptions, onUpdate, 
           const results = await geminiService.analyzeScreenTime(base64, file.type);
           
           let updatedCount = 0;
+          const matchedSubIds = new Set<string>();
+
           for (const result of results) {
-            const sub = subscriptions.find(s => 
-              s.name.toLowerCase().includes(result.name.toLowerCase()) || 
-              result.name.toLowerCase().includes(s.name.toLowerCase())
-            );
+            // Find the best matching subscription
+            const sub = subscriptions.find(s => {
+              const sName = s.name.toLowerCase();
+              const rName = result.name.toLowerCase();
+              
+              // Exact match
+              if (sName === rName) return true;
+              
+              // Contains match (only for long identifiers to avoid false positives like "Go" matching "Google")
+              if (rName.length > 3 && sName.includes(rName)) return true;
+              if (sName.length > 3 && rName.includes(sName)) return true;
+              
+              return false;
+            });
             
-            if (sub && sub.id) {
+            if (sub && sub.id && !matchedSubIds.has(sub.id)) {
               await subscriptionService.updateSubscription(sub.id, { 
                 usageFrequency: result.frequency as UsageFrequency,
                 usageTimeLabel: result.usageTimeLabel
               });
+              matchedSubIds.add(sub.id);
               updatedCount++;
             }
           }

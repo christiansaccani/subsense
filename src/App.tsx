@@ -759,14 +759,9 @@ export default function App() {
                   transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
                   className="absolute inset-0 border-2 border-brand-red/20 border-t-brand-red rounded-full"
                 />
-                {/* Inner spinning loader */}
+                {/* Inner icon (static) */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <motion.div
-                    animate={{ rotate: -360 }}
-                    transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-                  >
-                    <Zap className="w-10 h-10 text-brand-red" />
-                  </motion.div>
+                  <Zap className="w-10 h-10 text-brand-red" />
                 </div>
                 {/* Glow effect */}
                 <div className="absolute inset-0 bg-brand-red/20 blur-2xl rounded-full scale-75 animate-pulse" />

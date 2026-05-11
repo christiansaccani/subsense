@@ -16,18 +16,18 @@ export const geminiService = {
     const prompt = `Carefully analyze this screenshot of Apple Screen Time (iOS) or Digital Wellbeing (Android). 
     IMPORTANT: The user has been asked to provide a WEEKLY activity screenshot.
     
-    1. Identify EVERY app or service listed.
+    1. Identify ONLY apps or services that are CLEARLY VISIBLE in the provided screenshot.
     2. Extract the usage time per week.
     3. Convert that time into 'usageHoursPerWeek'.
     4. Map the usage to a 'UsageFrequency' value strictly following this scale:
-       - 'never': 0 hours/week
+       - 'never': 0 hours/week (only if listed with 0 or explicitly mentioned as unused)
        - 'rarely': < 2 hours/week
        - 'often': 2 to 5 hours/week
        - 'always': More than 5 hours/week
     
-    5. 'usageTimeLabel' should be the exact string from the UI (e.g. "1h 45m").
+    5. 'usageTimeLabel' must be the exact string visible from the UI (e.g. "1h 45m").
     
-    Be extremely thorough. Look for app icons and text.
+    CRITICAL: Do not guess or infer apps that are not visible. If an app is not in the screenshot, do not include it in the results.
     Return a JSON array of objects.`;
 
     try {
