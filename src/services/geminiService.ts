@@ -12,7 +12,17 @@ export interface AnalyzedApp {
 }
 
 export const geminiService = {
-  async analyzeScreenTime(base64Image: string, mimeType: string): Promise<AnalyzedApp[]> {
+  async analyzeScreenTime(base64Image: string, mimeType: string, isPremium: boolean): Promise<AnalyzedApp[]> {
+    if (!isPremium) {
+      throw new Error("Premium account required for AI analysis.");
+    }
+
+    if (this.isAnalyzing) {
+      throw new Error("An analysis is already in progress.");
+    }
+    
+    this.isAnalyzing = true;
+
     const prompt = `Carefully analyze this screenshot of Apple Screen Time (iOS) or Digital Wellbeing (Android). 
     IMPORTANT: The user has been asked to provide a WEEKLY activity screenshot.
     
@@ -32,7 +42,7 @@ export const geminiService = {
 
     try {
       const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-1.5-flash",
         contents: {
           parts: [
             { inlineData: { data: base64Image, mimeType } },
@@ -60,11 +70,17 @@ export const geminiService = {
         }
       });
 
+      this.isAnalyzing = false;
       const text = response.text || '[]';
       return JSON.parse(text);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Gemini analysis failed:", error);
-      return [];
+      this.isAnalyzing = false; // Reset guard
+      if (error?.message?.includes('429') || error?.status === 429 || error?.message?.toLowerCase().includes('rate limit')) {
+        throw new Error("Limite di richieste raggiunto (Rate Limit). Riprova tra un minuto per favore.");
+      }
+      throw new Error("Errore durante l'analisi dell'immagine. Riprova.");
     }
-  }
+  },
+  isAnalyzing: false
 };

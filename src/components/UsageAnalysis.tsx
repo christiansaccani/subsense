@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Subscription, UsageFrequency, UserProfile } from '../types';
 import { User } from 'firebase/auth';
-import { AlertCircle, Trash2, CheckCircle, Zap, ImagePlus, Loader2, Sparkles, Calendar, BellRing } from 'lucide-react';
+import { AlertCircle, Trash2, CheckCircle, Zap, ImagePlus, Loader2, Sparkles, Calendar, BellRing, Lock, Crown } from 'lucide-react';
 import { subscriptionService } from '../services/subscriptionService';
 import { geminiService } from '../services/geminiService';
 import { userService } from '../services/userService';
@@ -76,7 +76,13 @@ export default function UsageAnalysis({ user, profile, subscriptions, onUpdate, 
             return;
           }
 
-          const results = await geminiService.analyzeScreenTime(base64, file.type);
+          if ((geminiService as any).isAnalyzing) {
+            console.warn("Analysis already in progress, skipping redundant call.");
+            return;
+          }
+          
+          console.count("Gemini analysis invocation");
+          const results = await geminiService.analyzeScreenTime(base64, file.type, isPremium);
           
           let updatedCount = 0;
           const matchedSubIds = new Set<string>();
@@ -114,10 +120,10 @@ export default function UsageAnalysis({ user, profile, subscriptions, onUpdate, 
           }
           setAnalyzing(false);
           alert(`Analisi completata! Trovate ${results.length} app, aggiornate ${updatedCount} sottoscrizioni.`);
-        } catch (err) {
+        } catch (err: any) {
           console.error(err);
           setAnalyzing(false);
-          alert("Errore durante l'analisi dello screenshot.");
+          alert(err.message || "Errore durante l'analisi dello screenshot.");
         }
       };
       reader.readAsDataURL(file);
@@ -134,14 +140,17 @@ export default function UsageAnalysis({ user, profile, subscriptions, onUpdate, 
     sub.usageFrequency === 'never' || sub.usageFrequency === 'rarely'
   );
 
+  const isPremium = profile?.isPremium === true;
+
   return (
-    <div className="space-y-6">
-      <div className="frosted-card p-6 border-brand-red/20 bg-brand-red/5">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3 text-brand-red">
-            <AlertCircle className="w-5 h-5" />
-            <h3 className="font-bold">Analisi Utilizzo</h3>
-          </div>
+    <div className="relative">
+      <div className="space-y-6">
+        <div className="frosted-card p-6 border-brand-red/20 bg-brand-red/5">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3 text-brand-red">
+              <AlertCircle className="w-5 h-5" />
+              <h3 className="font-bold">Analisi Utilizzo</h3>
+            </div>
           
           <button 
             onClick={() => fileInputRef.current?.click()}
@@ -283,6 +292,7 @@ export default function UsageAnalysis({ user, profile, subscriptions, onUpdate, 
           ))}
         </div>
       </div>
+    </div>
 
       {!analyzing && suggestions.length > 0 && (
         <div className="frosted-card p-5 border-brand-red/20 bg-brand-red/5">

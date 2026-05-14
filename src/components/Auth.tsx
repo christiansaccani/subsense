@@ -197,22 +197,21 @@ export default function Auth({ user: propUser, onComplete }: AuthProps) {
   };
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center p-6 overflow-hidden bg-brand-dark">
+    <div className="min-h-screen relative flex items-center justify-center p-4 md:p-6 overflow-hidden bg-brand-dark">
       {/* Background Orbs */}
       <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] mesh-gradient-red blur-[120px] rounded-full opacity-50"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] mesh-gradient-purple blur-[120px] rounded-full opacity-50"></div>
-      
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="frosted-card max-w-md w-full p-8 md:p-10 relative z-10"
+        className="frosted-card max-w-sm w-full p-6 md:p-8 relative z-10"
       >
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-brand-red rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-brand-red/40">
-            <Layers className="w-8 h-8 text-white" />
+        <div className="text-center mb-6">
+          <div className="w-12 h-12 bg-brand-red rounded-xl flex items-center justify-center mx-auto mb-4 shadow-xl shadow-brand-red/40">
+            <Layers className="w-6 h-6 text-white" />
           </div>
-          <h1 className="text-4xl font-black mb-2 tracking-tighter">SubSense</h1>
-          <p className="text-slate-400 text-sm">
+          <h1 className="text-2xl font-black mb-1 tracking-tighter">SubSense</h1>
+          <p className="text-slate-400 text-xs">
             {mode === 'LOGIN' && 'Accedi al tuo account'}
             {mode === 'SIGNUP' && 'Crea un nuovo account'}
             {mode === 'FORGOT_PASSWORD' && 'Recupera la tua password'}
@@ -223,9 +222,9 @@ export default function Auth({ user: propUser, onComplete }: AuthProps) {
           <motion.div 
             initial={{ opacity: 0, h: 0 }}
             animate={{ opacity: 1, h: 'auto' }}
-            className="mb-6 p-4 bg-brand-red/10 border border-brand-red/20 rounded-xl flex items-center gap-3 text-brand-red text-sm font-medium"
+            className="mb-3 p-2 bg-brand-red/10 border border-brand-red/20 rounded-lg flex items-center gap-2 text-brand-red text-[10px] font-medium"
           >
-            <AlertCircle className="w-5 h-5 shrink-0" />
+            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
             <p>{error}</p>
           </motion.div>
         )}
@@ -239,25 +238,25 @@ export default function Auth({ user: propUser, onComplete }: AuthProps) {
             transition={{ duration: 0.2 }}
           >
             {resetSent ? (
-               <div className="text-center py-6">
-                 <div className="w-24 h-24 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 animate-in zoom-in-50 duration-700">
-                   {mode === 'FORGOT_PASSWORD' ? <Lock className="w-12 h-12" /> : <Mail className="w-12 h-12" />}
+               <div className="text-center py-4">
+                 <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-6 animate-in zoom-in-50 duration-700">
+                   {mode === 'FORGOT_PASSWORD' ? <Lock className="w-8 h-8" /> : <Mail className="w-8 h-8" />}
                  </div>
-                 <h3 className="text-3xl font-black mb-4 tracking-tighter text-white">
-                   {mode === 'SIGNUP' ? 'Controlla la tua Email' : 
+                 <h3 className="text-2xl font-black mb-3 tracking-tighter text-white">
+                   {mode === 'SIGNUP' ? 'Email inviata' : 
                     mode === 'FORGOT_PASSWORD' ? 'Link inviato!' : 'Account Pronto!'}
                  </h3>
-                 <p className="text-slate-400 text-sm mb-12 leading-relaxed px-6">
+                 <p className="text-slate-400 text-xs mb-8 leading-relaxed px-4">
                    {mode === 'SIGNUP' 
-                     ? `Ciao ${firstName}, abbiamo inviato un link di conferma. Clicca sul link per attivare SubSense.` 
+                     ? `Ciao ${firstName}, controlla la tua mail per attivare SubSense.` 
                      : mode === 'FORGOT_PASSWORD'
-                     ? 'Abbiamo inviato le istruzioni per reimpostare la tua password all\'indirizzo indicato.'
-                     : 'La tua configurazione è terminata. Ora puoi accedere a tutte le funzionalità.'}
+                     ? 'Controlla la tua email per reimpostare la password.'
+                     : 'Ora puoi accedere a tutte le funzionalità.'}
                  </p>
                  <div className="pt-2">
                    <button 
                      onClick={() => { setResetSent(false); setMode('LOGIN'); }}
-                     className="w-full py-4 bg-white text-black font-black rounded-xl hover:bg-slate-200 transition-all shadow-xl flex items-center justify-center gap-2 group"
+                     className="w-full py-3.5 bg-white text-black font-black rounded-xl hover:bg-slate-200 transition-all shadow-xl flex items-center justify-center gap-2 group text-sm"
                    >
                      Effettua il login
                      <LogIn className="w-5 h-5 transition-transform group-hover:translate-x-1" />
@@ -265,29 +264,26 @@ export default function Auth({ user: propUser, onComplete }: AuthProps) {
                  </div>
                </div>
             ) : mode === 'GOOGLE_PASSWORD_LINK' ? (
-                <div className="space-y-6">
-                  <div className="text-center p-5 bg-white/5 rounded-2xl border border-white/10 relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
-                      <Layers className="w-12 h-12 rotate-12" />
-                    </div>
-                    <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto mb-3" />
-                    <h3 className="font-bold text-white tracking-tight text-lg">Benvenuto in SubSense!</h3>
-                    <p className="text-slate-400 text-xs mt-2 leading-relaxed">
-                      Ti sei collegato con Google. Imposta una password ora per poter accedere <span className="text-brand-red font-bold">anche senza Google</span> in futuro.
+                <div className="space-y-4">
+                  <div className="text-center p-4 bg-white/5 rounded-2xl border border-white/10 relative overflow-hidden group">
+                    <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
+                    <h3 className="font-bold text-white tracking-tight text-base">Benvenuto!</h3>
+                    <p className="text-slate-400 text-[10px] mt-1 leading-relaxed">
+                      Imposta una password per poter accedere <span className="text-brand-red font-bold">anche senza Google</span>.
                     </p>
                   </div>
                   
-                  <form onSubmit={handleLinkPassword} className="space-y-5">
+                  <form onSubmit={handleLinkPassword} className="space-y-4">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Crea una Password SubSense</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Nuova Password</label>
                       <div className="relative">
-                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                         <input 
                           type={showPassword ? "text" : "password"}
                           required
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-12 text-white focus:border-brand-red/50 focus:ring-0 transition-all outline-none"
+                          className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-11 pr-11 text-white focus:border-brand-red/50 focus:ring-0 transition-all outline-none text-sm"
                           placeholder="Almeno 6 caratteri"
                         />
                         <button 
@@ -295,24 +291,23 @@ export default function Auth({ user: propUser, onComplete }: AuthProps) {
                           onClick={() => setShowPassword(!showPassword)}
                           className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
                         >
-                          {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                         </button>
                       </div>
-                      <p className="text-[9px] text-slate-500 ml-1">Potrai usare la tua email e questa password su qualsiasi dispositivo.</p>
                     </div>
 
                     <div className="space-y-3">
                       <button 
                         type="submit"
                         disabled={loading}
-                        className="w-full py-4 bg-brand-red text-white font-black rounded-xl hover:bg-brand-red/90 transition-all shadow-xl shadow-brand-red/20 flex items-center justify-center gap-2"
+                        className="w-full py-3.5 bg-brand-red text-white font-black rounded-xl hover:bg-brand-red/90 transition-all shadow-xl shadow-brand-red/20 flex items-center justify-center gap-2 text-sm"
                       >
                         {loading ? (
-                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         ) : (
                           <>
                             Configura Account
-                            <ArrowRight className="w-5 h-5" />
+                            <ArrowRight className="w-4 h-4" />
                           </>
                         )}
                       </button>
@@ -320,34 +315,34 @@ export default function Auth({ user: propUser, onComplete }: AuthProps) {
                   </form>
                 </div>
              ) : (
-               <div className="space-y-6">
-                 <form onSubmit={handleAuth} className="space-y-4">
-                   {mode === 'SIGNUP' && (
-                     <div className="grid grid-cols-2 gap-4">
-                       <div className="space-y-2">
-                         <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Nome</label>
+                <div className="space-y-4">
+                  <form onSubmit={handleAuth} className="space-y-4">
+                    {mode === 'SIGNUP' && (
+                     <div className="grid grid-cols-2 gap-3">
+                       <div className="space-y-1.5">
+                         <label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">Nome</label>
                          <div className="relative">
-                           <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                           <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                            <input 
                              type="text"
                              required
                              value={firstName}
                              onChange={(e) => setFirstName(e.target.value)}
-                             className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white focus:border-brand-red/50 focus:ring-0 transition-all outline-none text-sm font-medium"
+                             className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-3 text-white focus:border-brand-red/50 focus:ring-0 transition-all outline-none text-xs font-medium"
                              placeholder="Nome"
                            />
                          </div>
                        </div>
-                       <div className="space-y-2">
-                         <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Cognome</label>
+                       <div className="space-y-1.5">
+                         <label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">Cognome</label>
                          <div className="relative">
-                           <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                           <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                            <input 
                              type="text"
                              required
                              value={lastName}
                              onChange={(e) => setLastName(e.target.value)}
-                             className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white focus:border-brand-red/50 focus:ring-0 transition-all outline-none text-sm font-medium"
+                             className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-3 text-white focus:border-brand-red/50 focus:ring-0 transition-all outline-none text-xs font-medium"
                              placeholder="Cognome"
                            />
                          </div>
@@ -355,51 +350,51 @@ export default function Auth({ user: propUser, onComplete }: AuthProps) {
                      </div>
                    )}
 
-                   <div className="space-y-2">
-                     <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Email</label>
+                   <div className="space-y-1.5">
+                     <label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">Email</label>
                      <div className="relative">
-                       <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                       <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                        <input 
                          type="email"
                          required
                          value={email}
                          onChange={(e) => setEmail(e.target.value)}
-                         className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white focus:border-brand-red/50 focus:ring-0 transition-all outline-none text-sm font-medium"
+                         className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-3 text-white focus:border-brand-red/50 focus:ring-0 transition-all outline-none text-xs font-medium"
                          placeholder="email@esempio.it"
                        />
                      </div>
                    </div>
 
                   {mode !== 'FORGOT_PASSWORD' && (
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       <div className="flex justify-between items-center ml-1">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Password</label>
+                        <label className="text-[9px] font-black uppercase tracking-widest text-slate-500">Password</label>
                         {mode === 'LOGIN' && (
                           <button 
                             type="button" 
                             onClick={() => setMode('FORGOT_PASSWORD')}
-                            className="text-[10px] font-black uppercase tracking-widest text-brand-red hover:text-brand-red/80"
+                            className="text-[9px] font-black uppercase tracking-widest text-brand-red hover:text-brand-red/80"
                           >
                             Dimenticata?
                           </button>
                         )}
                       </div>
                       <div className="relative">
-                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                        <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                         <input 
                           type={showPassword ? "text" : "password"}
                           required
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-12 text-white focus:border-brand-red/50 focus:ring-0 transition-all outline-none"
+                          className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-10 text-white focus:border-brand-red/50 focus:ring-0 transition-all outline-none text-xs"
                           placeholder="••••••••"
                         />
                         <button 
-                          type="button"
+                          type="button" 
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                          className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
                         >
-                          {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                         </button>
                       </div>
                     </div>
@@ -408,53 +403,53 @@ export default function Auth({ user: propUser, onComplete }: AuthProps) {
                   <button 
                     type="submit"
                     disabled={loading}
-                    className="w-full py-4 bg-brand-red text-white font-black rounded-xl hover:bg-brand-red/90 transition-all shadow-xl shadow-brand-red/20 flex items-center justify-center gap-2"
+                    className="w-full py-3.5 bg-brand-red text-white font-black rounded-xl hover:bg-brand-red/90 transition-all shadow-xl shadow-brand-red/20 flex items-center justify-center gap-2 text-sm mt-1"
                   >
                     {loading ? (
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     ) : (
                       <>
                         {mode === 'LOGIN' ? 'Accedi' : mode === 'SIGNUP' ? 'Registrati' : 'Invia email'}
-                        <ArrowRight className="w-5 h-5" />
+                        <ArrowRight className="w-4 h-4" />
                       </>
                     )}
                   </button>
-                </form>
+                 </form>
 
-                <div className="relative">
-                  <div className="absolute inset-0 flex items-center">
+                <div className="relative pt-1.5">
+                  <div className="absolute inset-0 flex items-center pt-1.5">
                     <div className="w-full border-t border-white/5"></div>
                   </div>
-                  <div className="relative flex justify-center text-[10px] font-black uppercase tracking-widest">
-                    <span className="bg-brand-dark px-4 text-slate-600">Oppure continua con</span>
+                  <div className="relative flex justify-center text-[9px] font-black uppercase tracking-widest pt-1.5">
+                    <span className="bg-brand-dark px-3 text-slate-600">Oppure</span>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-4">
+                <div className="grid grid-cols-1 pt-1">
                   <button 
                     onClick={handleGoogleSignIn}
-                    className="flex items-center justify-center gap-3 bg-white text-brand-dark font-bold py-3.5 rounded-xl hover:bg-slate-100 transition-all"
+                    className="flex items-center justify-center gap-2 bg-white text-brand-dark font-bold py-3 rounded-xl hover:bg-slate-100 transition-all"
                   >
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-5 h-5" alt="Google" />
-                    <span className="text-sm">Continua con Google</span>
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-4 h-4" alt="Google" />
+                    <span className="text-xs">Continua con Google</span>
                   </button>
                 </div>
 
-                <div className="pt-4 text-center">
+                <div className="pt-2 text-center">
                   {mode === 'LOGIN' ? (
-                    <p className="text-slate-500 text-sm">
-                      Non hai un account?{' '}
+                    <p className="text-slate-500 text-xs">
+                      Senza account?{' '}
                       <button 
                         onClick={() => setMode('SIGNUP')}
                         className="text-brand-red font-bold hover:underline"
                       >
-                        Registrati ora
+                        Registrati
                       </button>
                     </p>
                   ) : (
                     <button 
                       onClick={() => setMode('LOGIN')}
-                      className="flex items-center gap-2 text-slate-500 text-sm font-bold hover:text-white transition-colors mx-auto"
+                      className="flex items-center gap-2 text-slate-500 text-xs font-bold hover:text-white transition-colors mx-auto"
                     >
                       <ChevronLeft className="w-4 h-4" />
                       Torna al login

@@ -377,31 +377,31 @@ export default function App() {
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] mesh-gradient-red blur-[120px] rounded-full opacity-50"></div>
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] mesh-gradient-purple blur-[120px] rounded-full opacity-50"></div>
         
-        <motion.div 
+      <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="frosted-card max-w-md w-full p-10 text-center relative z-10"
+          className="frosted-card max-w-md w-full p-6 md:p-8 text-center relative z-10"
         >
-          <div className="w-20 h-20 bg-brand-red/10 border border-brand-red/20 rounded-3xl flex items-center justify-center mx-auto mb-8 animate-pulse text-brand-red">
-            <Mail className="w-10 h-10" />
+          <div className="w-16 h-16 bg-brand-red/10 border border-brand-red/20 rounded-2xl flex items-center justify-center mx-auto mb-6 animate-pulse text-brand-red">
+            <Mail className="w-8 h-8" />
           </div>
           
-          <h1 className="text-3xl font-black mb-4 tracking-tighter">
-            {profile?.firstName ? `Ciao, ${profile.firstName}!` : 'Verifica la tua email'}
+          <h1 className="text-2xl font-black mb-3 tracking-tighter">
+            {profile?.firstName ? `Ciao, ${profile.firstName}!` : 'Verifica email'}
           </h1>
           
-          <p className="text-slate-400 mb-10 leading-relaxed text-sm px-4">
-            Abbiamo inviato un link di conferma a <span className="text-white font-bold">{user.email}</span>. 
-            Clicca sul link per attivare il tuo account SubSense e iniziare a risparmiare.
+          <p className="text-slate-400 mb-6 leading-relaxed text-xs px-2">
+            Abbiamo inviato un link a <span className="text-white font-bold">{user.email}</span>. 
+            Clicca per attivare il tuo account SubSense.
           </p>
           
-          <div className="space-y-6">
+          <div className="space-y-4">
             <button
               onClick={resendVerification}
-              className="w-full py-4 bg-brand-red text-white font-black rounded-xl hover:bg-brand-red/90 transition-all shadow-xl shadow-brand-red/20 flex items-center justify-center gap-2"
+              className="w-full py-3.5 bg-brand-red text-white font-black rounded-xl hover:bg-brand-red/90 transition-all shadow-xl shadow-brand-red/20 flex items-center justify-center gap-2 text-sm"
             >
-              Non hai ricevuto nulla? Reinvia
-              <ArrowRight className="w-5 h-5 opacity-50" />
+              Reinvia link
+              <ArrowRight className="w-4 h-4 opacity-50" />
             </button>
             
             <div className="h-4">
@@ -436,27 +436,27 @@ export default function App() {
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="frosted-card max-w-md w-full p-10 text-center relative z-10"
+          className="frosted-card max-w-md w-full p-6 md:p-8 text-center relative z-10"
         >
-          <div className="w-24 h-24 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 animate-in zoom-in-50 duration-700">
-            <CheckCircle2 className="w-12 h-12" />
+          <div className="w-20 h-20 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-[2rem] flex items-center justify-center mx-auto mb-6 animate-in zoom-in-50 duration-700">
+            <CheckCircle2 className="w-10 h-10" />
           </div>
           
-          <h1 className="text-4xl font-black mb-4 tracking-tighter text-white">
+          <h1 className="text-2xl font-black mb-3 tracking-tighter text-white">
             Email Confermata!
           </h1>
           
-          <p className="text-slate-400 mb-12 leading-relaxed text-sm px-6">
-            Fantastico! Hai confermato la mail con successo. Il tuo account SubSense è ora attivo e pronto all'uso.
+          <p className="text-slate-400 mb-8 leading-relaxed text-xs px-4">
+            Il tuo account SubSense è ora attivo e pronto all'uso.
           </p>
           
-          <div className="space-y-4">
+          <div className="space-y-3">
             <button
               onClick={() => {
                 setIsVerifiedNow(false);
                 if (user) fetchSubscriptions(user.uid);
               }}
-              className="w-full py-4 bg-brand-red text-white font-black rounded-xl hover:bg-brand-red/90 transition-all shadow-xl shadow-brand-red/20 flex items-center justify-center gap-2 group"
+              className="w-full py-3.5 bg-brand-red text-white font-black rounded-xl hover:bg-brand-red/90 transition-all shadow-xl shadow-brand-red/20 flex items-center justify-center gap-2 group text-sm"
             >
               Entra nella Dashboard
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
@@ -464,7 +464,7 @@ export default function App() {
             
             <button
               onClick={logout}
-              className="w-full py-4 bg-white/5 border border-white/10 rounded-xl font-bold hover:bg-white/10 transition-all text-sm text-slate-400"
+              className="w-full py-3 border border-white/10 rounded-xl font-bold hover:bg-white/10 transition-all text-xs text-slate-400"
             >
               Torna al login
             </button>
@@ -522,19 +522,23 @@ export default function App() {
               {view === 'dashboard' && 'Dashboard'}
               {view === 'list' && 'Abbonamenti'}
               {view === 'analysis' && 'Analisi AI'}
+              {view === 'settings' && 'Profilo'}
             </h1>
             <p className="text-slate-500 text-[11px] font-bold uppercase tracking-wider">
               {view === 'dashboard' && 'Riepilogo spese'}
               {view === 'list' && `${subscriptions.length} servizi attivi`}
               {view === 'analysis' && 'Ottimizzazione'}
+              {view === 'settings' && 'Impostazioni account'}
             </p>
           </div>
-          <button 
-            onClick={() => setIsAddModalOpen(true)}
-            className="touch-button w-10 h-10 bg-brand-red rounded-full flex items-center justify-center shadow-lg shadow-brand-red/40"
-          >
-            <Plus className="w-6 h-6 text-white" />
-          </button>
+          {view !== 'settings' && (
+            <button 
+              onClick={() => setIsAddModalOpen(true)}
+              className="touch-button w-10 h-10 bg-brand-red rounded-full flex items-center justify-center shadow-lg shadow-brand-red/40"
+            >
+              <Plus className="w-6 h-6 text-white" />
+            </button>
+          )}
         </div>
 
         {view === 'dashboard' && <Dashboard subscriptions={subscriptions} />}
@@ -613,8 +617,8 @@ export default function App() {
         )}
 
         {view === 'settings' && (
-          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="frosted-card p-6">
+          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="frosted-card p-5">
               <h3 className="text-[10px] font-black uppercase tracking-widest text-brand-red mb-4">Profilo</h3>
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
@@ -658,7 +662,7 @@ export default function App() {
               )}
             </div>
 
-            <div className="frosted-card p-6 border-brand-red/20">
+            <div className="frosted-card p-5 border-brand-red/20">
               <h3 className="text-[10px] font-black uppercase tracking-widest text-brand-red mb-4">Zona Pericolo</h3>
               <p className="text-slate-400 text-sm mb-6 leading-relaxed">
                 L'eliminazione dell'account è un'operazione irreversibile. Perderai l'accesso a tutti i tuoi dati e cronologia degli abbonamenti.

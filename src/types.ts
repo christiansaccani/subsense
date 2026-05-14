@@ -30,6 +30,7 @@ export interface UserProfile {
   lastName?: string;
   activityMonitoringEnabled?: boolean;
   googleLinked?: boolean;
+  isPremium?: boolean;
   lastAnalysisAt?: any; // Firestore Timestamp
   createdAt: any;
 }

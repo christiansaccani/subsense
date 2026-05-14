@@ -12,7 +12,7 @@
 }
 
 @layer base {
-  body {
+  html, body {
     @apply bg-brand-dark text-white font-sans antialiased;
     margin: 0;
     min-height: 100vh;
@@ -20,9 +20,10 @@
     /* Evita lo zoom accidentale su mobile */
     touch-action: manipulation;
     scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
   }
 
-  body::-webkit-scrollbar {
+  html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
   }
 }
